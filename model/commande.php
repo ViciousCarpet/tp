@@ -69,12 +69,20 @@ class commande {
 			$sql="INSERT INTO commande (dateCommande, idClient, devis) VALUES ('".date("20y-m-d")."',".$_SESSION["connexion"].", 1)";
 			// $sql->execute();
 
-			$sql2="SELECT numeroCommande FROM commande WHERE dateCommande='".date("y-m-d")."' AND idClient=".$_SESSION["connexion"]." AND devis=1";
-			echo $sql2."<br>";
+			$sql2="SELECT numeroCommande FROM commande WHERE dateCommande='".date("20y-m-d")."' AND idClient=:id AND devis=1 ORDER BY numeroCommande DESC";
+			$req2 = $this->pdo->prepare($sql2);
+			$req2->bindParam(':id', $_SESSION["connexion"], PDO::PARAM_INT);
+			echo $sql2;
+			$req2->execute();
+			
+			$numCommande = $sql2->fetchAll()/*[0]['numeroCommande']*/;
+			var_dump($numCommande);
+			// echo $numCommande."<br>";
 
 			// $sql3="INSERT INTO commander (numeroCommande, codeProduit, quantite) VALUES (:numC, :codeP, :quant)";
-			// $sql3->bindParam(':codeP', $article['codeProduit'], PDO::PARAM_INT);
-			// $sql3->bindParam(':quant', $article['quantite'], PDO::PARAM_INT);
+			// $sql3->bindParam(':numC', )
+			// $sql3->bindParam(':codeP', $_GET['id'], PDO::PARAM_INT);
+			// $sql3->bindParam(':quant', $_POST['qt'], PDO::PARAM_INT);
 			// $sql3->execute();
 			return true;
 		// }

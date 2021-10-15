@@ -267,7 +267,7 @@ class vue {
 		$lesCategories = (new categorie)->getAll();
 		$this->produit($lesCategories,$leProduit, null);
 		if(isset($_SESSION["connexion"])){
-			?>blbal
+			?>
 				<form method="post">
 					<br /><br />
 					<table>
