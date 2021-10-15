@@ -1,6 +1,10 @@
 <?php
 session_start();
-
+?><form method="post"><button name="deco">Déconnexion</button></form>
+<?php
+if(isset($_POST["deco"])){
+session_destroy();
+}
 // Test de connexion à la base
 $config = parse_ini_file("config.ini");
 try {

@@ -1,5 +1,5 @@
 <?php
-
+//********************************************* ADMIN : $_SESSION["connexion"] = 0 ************************** */
 class vue {
 	
 	private function entete($lesCategories) {
@@ -265,7 +265,8 @@ class vue {
 	}
 	public function devis($leProduit){//********************************************************************************* */
 		$lesCategories = (new categorie)->getAll();
-		$this->produit($lesCategories,$leProduit, null);
+		$mes=null;
+		$this->produit($lesCategories,$leProduit, $mes);
 		if(isset($_SESSION["connexion"])){
 			?>
 				<form method="post">
@@ -278,7 +279,13 @@ class vue {
 			<?php
 			if(isset($_POST["Valider"])){
 				$co=new commande;
-				$co->faireUnDevis($_GET["id"]);
+				if($co->faireUnDevis($_GET["id"])){
+					$message="La demande de devis à bien été soumise au vendeur";
+				}
+				else if(!$co->faireUnDevis($_GET["id"])){
+					$message="Une erreur est survenue";
+				}
+
 			}
 		}
 	}

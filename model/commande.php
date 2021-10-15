@@ -65,29 +65,25 @@ class commande {
 		}
 	}
 	public function faireUnDevis($produit){
-		// try{
+		try{
 			$sql="INSERT INTO commande (dateCommande, idClient, devis) VALUES ('".date("20y-m-d")."',".$_SESSION["connexion"].", 1)";
-			// $sql->execute();
+			$req=$this->pdo->prepare($sql);
+			$req->execute();
 
 			$sql2="SELECT numeroCommande FROM commande WHERE dateCommande='".date("20y-m-d")."' AND idClient=:id AND devis=1 ORDER BY numeroCommande DESC";
 			$req2 = $this->pdo->prepare($sql2);
 			$req2->bindParam(':id', $_SESSION["connexion"], PDO::PARAM_INT);
-			echo $sql2;
 			$req2->execute();
-			
-			$numCommande = $sql2->fetchAll()/*[0]['numeroCommande']*/;
-			var_dump($numCommande);
-			// echo $numCommande."<br>";
-
-			// $sql3="INSERT INTO commander (numeroCommande, codeProduit, quantite) VALUES (:numC, :codeP, :quant)";
-			// $sql3->bindParam(':numC', )
-			// $sql3->bindParam(':codeP', $_GET['id'], PDO::PARAM_INT);
-			// $sql3->bindParam(':quant', $_POST['qt'], PDO::PARAM_INT);
-			// $sql3->execute();
+			$numC = $req2->fetchAll();
+			$sql3="INSERT INTO commander (numeroCommande, codeProduit, quantite) VALUES (".$numC[0]["numeroCommande"].", ".$_GET["id"].", ".$_POST["qt"].")";
+			$req3=$this->pdo->prepare($sql3);
+			$req3->execute();
+			echo "La demande de devis à bien été soumise au vendeur.";
 			return true;
-		// }
-		// catch(PDOException $e){
-
-		// }
+		}
+		catch(PDOException $e){
+			echo "<script>alert('La demande de devis a échouée veuillez recommencer !');</script>";
+			return false;
+		}
 	}
 }
