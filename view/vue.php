@@ -404,8 +404,7 @@ class vue {
 		$this->entete($lesCategories);
 		if(isset($_SESSION["connexion"])&&$_SESSION["connexion"]==0){
 			$lesDemandesDevis=(new commande)->getLesDemandesDevis();
-			var_dump($lesDemandesDevis);
-			echo "<form method='get'><table class=\"table table-striped\">
+			echo "<form method='post'><table class=\"table table-striped\">
 					<thead>
 					<th scope='col'>#</th><th scope='col'>Numéro de demande</th><th scope='col'>Date de la demande</th><th scope='col'>Client</th><th scope='col'>Traiter le devis</th>
 					</thead><tbody>";
@@ -418,8 +417,8 @@ class vue {
 
 			}
 			echo "</table></form>";
-			if(isset($_GET['traiter'])){//*********************** */	ICI IL FAUT METTRE EN ACTION LE NOM DE L'ACTION QUE T'AS CHOISI POUR POUVOIR RÉPONDRE AU DEVIS 
-				header("Location: ./index.php?action=&numdevis=".$_GET["traiter"]/*TU PEUXMETTRE ENTRE LE = ET LE &*/ );	// IL ME SEMBLE C'ETAIT REPONSE DEVIS MAIS JE N'EN SUIS PAS SUR ^^
+			if(isset($_POST['traiter'])){
+				header("Location: ./index.php?action=admin_devis&numdevis=".$_POST["traiter"] );
 			}
 		
 		}
@@ -428,6 +427,26 @@ class vue {
 			exit();
 		}
 		
+	}
+
+	public function detailsDevis($lesCategories,$ledevis){
+		$this->entete($lesCategories);
+		$mondevis=(new commande)->getLesDetailsDevis($ledevis);
+		$monproduit=(new produit)->getInfosProduit($mondevis[0]["codeProduit"]);
+		// var_dump($monproduit);
+		// var_dump($mondevis);
+		echo'<div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+		<div class="card-header">Devis n°'.$mondevis[0]["numeroCommande"].'</div>
+		<div class="card-body">
+			<h5 class="card-title">'.$monproduit["designationProduit"].'</h5>
+			<p class="card-text">Produit :'.$mondevis[0]["codeProduit"].'<br />
+			Quantité : '.$mondevis[0]["quantite"].'
+			<form method=post><button class="btn btn-outline-light" name="prix">Donner un devis</button></form></p>
+		</div>
+		</div>';
+		if(isset($_POST["prix"])){
+			header("Location: ./index.php?action=...");//C'est sur les ... que tu mets le nom du case que tu as mis dans l'index.php
+		}//(Un truc genre reponse_devis ou un truc du genre)
 	}
 
 	public function erreur404($lesCategories) {

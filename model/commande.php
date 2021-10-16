@@ -101,15 +101,11 @@ class commande {
 	}
 	public function getLesDetailsDevis($leDevis){
 		try{
-			foreach($infosCommande as $index => $param){
-				$sql2="SELECT * FROM commander WHERE numeroCommande=".$infosCommande[$index]["numeroCommande"];
+				$sql2="SELECT * FROM commander WHERE numeroCommande=".$leDevis;
 				$req2 = $this->pdo->prepare($sql2);
 				$req2->bindParam(':id', $_SESSION["connexion"], PDO::PARAM_INT);
 				$req2->execute();
 				$infosCommander = $req2->fetchAll();
-				echo "<br>";
-				// var_dump($infosCommander);
-			}
 			return $infosCommander;
 		}
 		catch(PDOException $e){

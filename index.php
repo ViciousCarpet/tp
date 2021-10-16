@@ -64,7 +64,12 @@ if(isset($_GET["action"])) {
 			(new controleur)->devis();
 			break;
 		case "admin_devis":
-			(new controleur)->admin_devis();
+			if(!isset($_GET["numdevis"])){
+				(new controleur)->admin_devis();
+			}
+			else{
+				(new controleur)->detailsDevis();
+			}
 			break;
 		
 		// Route par défaut : erreur 404

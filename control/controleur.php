@@ -201,6 +201,10 @@ class controleur {
 		$lesCategories = (new categorie)->getAll();
 		(new vue)->affichageDevis($lesCategories);
 	}
+	public function detailsDevis(){
+		$lesCategories = (new categorie)->getAll();
+		(new vue)->detailsDevis($lesCategories,$_GET["numdevis"]);
+	}
 
 	public function categorie() {
 		$lesCategories = (new categorie)->getAll();
