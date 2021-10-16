@@ -197,6 +197,11 @@ class controleur {
 		}
 	}
 
+	public function admin_devis(){
+		$lesCategories = (new categorie)->getAll();
+		(new vue)->affichageDevis($lesCategories);
+	}
+
 	public function categorie() {
 		$lesCategories = (new categorie)->getAll();
 

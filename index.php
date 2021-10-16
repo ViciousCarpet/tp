@@ -63,6 +63,9 @@ if(isset($_GET["action"])) {
 		case "devis":
 			(new controleur)->devis();
 			break;
+		case "admin_devis":
+			(new controleur)->admin_devis();
+			break;
 		
 		// Route par défaut : erreur 404
 		default:

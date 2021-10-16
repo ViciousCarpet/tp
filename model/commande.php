@@ -86,4 +86,34 @@ class commande {
 			return false;
 		}
 	}
+	public function getLesDemandesDevis(){
+		try{
+			$sql = "SELECT numeroCommande, dateCommande, idClient FROM commande WHERE devis=1";
+			$req = $this->pdo->prepare($sql);
+			$req->execute();
+			$infosCommande = $req->fetchAll();
+			// var_dump($infosCommande);
+			return $infosCommande;
+		}
+		catch(PDOException $e){
+			echo "<script>alert('Impossible d\'afficher les demandes de devis !');</script>";
+		}
+	}
+	public function getLesDetailsDevis($leDevis){
+		try{
+			foreach($infosCommande as $index => $param){
+				$sql2="SELECT * FROM commander WHERE numeroCommande=".$infosCommande[$index]["numeroCommande"];
+				$req2 = $this->pdo->prepare($sql2);
+				$req2->bindParam(':id', $_SESSION["connexion"], PDO::PARAM_INT);
+				$req2->execute();
+				$infosCommander = $req2->fetchAll();
+				echo "<br>";
+				// var_dump($infosCommander);
+			}
+			return $infosCommander;
+		}
+		catch(PDOException $e){
+			echo "<script>alert('Impossible d\'afficher les détails de ce devis !');</script>";
+		}
+	}
 }

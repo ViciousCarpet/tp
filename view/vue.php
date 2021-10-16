@@ -20,17 +20,23 @@ class vue {
 					<a class=\"navbar-brand\" href=\"index.php?action=accueil\">BOUTIQ</a>
 					<button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">
 						<span class=\"navbar-toggler-icon\"></span>
-					</button>
-				
-					<div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">
+					</button><div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">
 						<ul class=\"navbar-nav mr-auto\">
 							<li class=\"nav-item\">
 								<a class=\"nav-link\" href=\"index.php?action=accueil\">
 									Accueil
 								</a>
-							</li>
-							
-							<li class=\"nav-item dropdown\">
+							</li>";
+							if(isset($_SESSION["connexion"])&&$_SESSION["connexion"]==0){
+								echo "<div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">
+								<ul class=\"navbar-nav mr-auto\">
+									<li class=\"nav-item\">
+										<a class=\"nav-link\" href=\"index.php?action=admin_devis\">
+											Demandes devis
+										</a>
+									</li>";
+							}
+							echo"<li class=\"nav-item dropdown\">
 								<a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
 									Catégories
 								</a>
@@ -392,6 +398,36 @@ class vue {
 		";
 
 		$this->fin();
+	}
+
+	public function affichageDevis($lesCategories){
+		$this->entete($lesCategories);
+		if(isset($_SESSION["connexion"])&&$_SESSION["connexion"]==0){
+			$lesDemandesDevis=(new commande)->getLesDemandesDevis();
+			var_dump($lesDemandesDevis);
+			echo "<form method='get'><table class=\"table table-striped\">
+					<thead>
+					<th scope='col'>#</th><th scope='col'>Numéro de demande</th><th scope='col'>Date de la demande</th><th scope='col'>Client</th><th scope='col'>Traiter le devis</th>
+					</thead><tbody>";
+			foreach($lesDemandesDevis as $index=>$param){
+				$idx=$index+1;
+				
+					echo"<tr><th scope='row'> $idx </th>
+					<td>".$param["numeroCommande"]."</td><td>".$param["dateCommande"]."</td><td>".$param["idClient"]."</td><td><button class='btn btn-dark' name='traiter' value='".$param["numeroCommande"]."'>Traiter la demande</button></td></tr>
+					";
+
+			}
+			echo "</table></form>";
+			if(isset($_GET['traiter'])){//*********************** */	ICI IL FAUT METTRE EN ACTION LE NOM DE L'ACTION QUE T'AS CHOISI POUR POUVOIR RÉPONDRE AU DEVIS 
+				header("Location: ./index.php?action=&numdevis=".$_GET["traiter"]/*TU PEUXMETTRE ENTRE LE = ET LE &*/ );	// IL ME SEMBLE C'ETAIT REPONSE DEVIS MAIS JE N'EN SUIS PAS SUR ^^
+			}
+		
+		}
+		else{
+			header("Location: ./index.php?action=accueil");
+			exit();
+		}
+		
 	}
 
 	public function erreur404($lesCategories) {
