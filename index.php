@@ -1,10 +1,6 @@
 <?php
 session_start();
-?><form method="post"><button name="deco">Déconnexion</button></form>
-<?php
-if(isset($_POST["deco"])){
-session_destroy();
-}
+
 // Test de connexion à la base
 $config = parse_ini_file("config.ini");
 try {
@@ -71,6 +67,17 @@ if(isset($_GET["action"])) {
 				(new controleur)->detailsDevis();
 			}
 			break;
+		case "reponseDevis":
+			if(!isset($_GET["numdevis"])){
+				(new controleur)->accueil();
+			}
+			else{
+				(new controleur)->reponseDevis();
+			}
+		break;
+		case "cliReponseDevis":
+			(new controleur)->cliReponseDevis();
+		break;
 		
 		// Route par défaut : erreur 404
 		default:

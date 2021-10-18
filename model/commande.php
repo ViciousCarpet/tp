@@ -112,4 +112,35 @@ class commande {
 			echo "<script>alert('Impossible d\'afficher les détails de ce devis !');</script>";
 		}
 	}
+	public function validerDevis($ledevis){
+		try{
+			$sql="UPDATE commande SET devis=0 WHERE numeroCommande=".$ledevis;
+			// echo $sql;
+			$req=$this->pdo->prepare($sql);
+			$req->execute();	
+			$msg="Le devis à bien été validé";
+		}
+		catch(PDOException $e){
+			$msg="<script>alert('Une erreur est survenue !')</script>";
+		}
+		return $msg;	
+	}
+	public function refuserDevis($ledevis){
+		try{
+			$sql="DELETE FROM commander WHERE numeroCommande=".$ledevis;
+			
+			$req=$this->pdo->prepare($sql);
+				$req->execute();
+
+			$sql2="DELETE FROM commande WHERE numeroCommande=".$ledevis;
+		
+			$req2=$this->pdo->prepare($sql2);
+				$req2->execute();	
+				$msg="Le devis à bien été refusé.";
+		}
+		catch(PDOException $e){
+			$msg="<script>alert('Une erreur est survenue !')</script>";
+		}
+		return $msg;
+	}
 }

@@ -205,6 +205,14 @@ class controleur {
 		$lesCategories = (new categorie)->getAll();
 		(new vue)->detailsDevis($lesCategories,$_GET["numdevis"]);
 	}
+	public function reponseDevis(){
+		$lesCategories = (new categorie)->getAll();
+		(new vue)->reponseDevis($lesCategories,$_GET["numdevis"]);
+	}
+	public function cliReponseDevis(){
+		$lesCategories=(new categorie)->getAll();
+		(new vue)->cliReponseDevis($lesCategories);
+	}
 
 	public function categorie() {
 		$lesCategories = (new categorie)->getAll();

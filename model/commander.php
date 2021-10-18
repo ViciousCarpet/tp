@@ -26,6 +26,19 @@ class commander {
 		
 		return $req->fetchAll();
 	}
+	public function repondreDevis($leprix,$ledevis){
+		$sql ="UPDATE commander SET prixDevis=".$leprix." WHERE numeroCommande=".$ledevis;
+		$req = $this->pdo->prepare($sql);
+		$req->execute();
+		return true;
+	}
+
+	public function getAllCommander($leclient){
+		$sql="SELECT * FROM commander WHERE numeroCommande IN(SELECT numeroCommande FROM commande WHERE idClient=".$leclient." AND devis=1 AND prixDevis IS NOT NULL)";
+		$req=$this->pdo->prepare($sql);
+		$req->execute();
+		return $req->fetchAll();
+	}
 
 	public function setProduitDevis($produit,$commande,$quantite){
 		$sql="INSERT INTO commander(numeroCommande, codeProduit, quantite) VALUES (':comm',':produit',:quantite)";

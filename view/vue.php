@@ -34,15 +34,20 @@ class vue {
 										<a class=\"nav-link\" href=\"index.php?action=admin_devis\">
 											Demandes devis
 										</a>
-									</li>";
+									</li>
+									";
 							}
-							echo"<li class=\"nav-item dropdown\">
+							echo"<li class=\"nav-item\">
+								<a class=\"nav-link\" href=\"index.php?action=cliReponseDevis\">
+									Réponses devis
+								</a>
+							</li>
+							<li class=\"nav-item dropdown\">
 								<a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
 									Catégories
 								</a>
 								<div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">
 			";
-			
 			foreach($lesCategories as $uneCategorie) {
 				echo "<a class=\"dropdown-item\" href=\"index.php?action=categorie&id=".$uneCategorie["idCategorie"]."\">".$uneCategorie["nomCategorie"]."</a>";
 			}			
@@ -445,8 +450,56 @@ class vue {
 		</div>
 		</div>';
 		if(isset($_POST["prix"])){
-			header("Location: ./index.php?action=...");//C'est sur les ... que tu mets le nom du case que tu as mis dans l'index.php
-		}//(Un truc genre reponse_devis ou un truc du genre)
+			header("Location: ./index.php?action=reponseDevis&numdevis=".$_GET["numdevis"]);
+		}
+	}
+	
+	public function reponseDevis($lesCategories,$ledevis){
+		$this->entete($lesCategories);
+		echo "<form method='post'>
+		<label for='prix'>Prix énoncé : </label><input type='number' name='prix' min='0' step='0.01' max='99999999,99' placeholder='Prix en €'>
+		<input type='submit' name='Valider'>
+		</form>";
+		if(isset($_POST["Valider"])){
+			try{
+				(new commander)->repondreDevis($_POST["prix"],$_GET["numdevis"]);
+				echo "La réponse du devis à bien été envoyée.";
+				header("Refresh:3; url=index.php?action=admin_devis");
+			}
+			catch(PDOException $e){
+				echo "<script>alert('La réponse s\'est mal passée !');</script>";
+			}
+		}
+	}
+	public function cliReponseDevis($lesCategories){
+		$this->entete($lesCategories);
+		$lesDevis=(new commander)->GetAllcommander($_SESSION["connexion"]);
+		// var_dump($lesDevis);
+		$valider=null;
+		foreach($lesDevis as $index=>$param){
+
+			$leProduit=(new produit)->getInfosProduit($lesDevis[$index]["codeProduit"]);
+// var_dump($leProduit);
+			echo'<form method="post"><div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+				<div class="card-header">Devis n°'.$lesDevis[$index]["numeroCommande"].'</div>
+					<div class="card-body">
+						<p class="card-text">Produit :'.$leProduit["designationProduit"].'<br />
+							Quantite : '.$lesDevis[$index]["quantite"].' <br />
+							Prix du devis : '.$lesDevis[$index]["prixDevis"].' <br />
+							<br /> <button class="btn btn-outline-light" value="'.$lesDevis[$index]["numeroCommande"].'" name="accepter">Accepter</button>
+							<br /> <button class="btn btn-outline-light" value="'.$lesDevis[$index]["numeroCommande"].'" name="refuser">Refuser</button>
+						</form></p>
+					</div>
+				</div>';
+		}
+		if(isset($_POST["accepter"])){
+			$valider=(new commande)->validerDevis($_POST["accepter"]);
+			header("Refresh: 0; url=index.php?action=cliReponseDevis");
+		}
+		if(isset($_POST["refuser"])){
+			$refuser=(new commande)->refuserDevis($_POST["refuser"]);
+			header("Refresh: 0; url=index.php?action=cliReponseDevis");
+		}
 	}
 
 	public function erreur404($lesCategories) {
