@@ -1,2 +1,2 @@
 # TP-Boutik
- Dépôt en ligne du TP Boutik pour l'épreuve E4.
+Le projet final se trouve dans la branche réponse devis.
