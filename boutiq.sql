@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `client` (
 --
 
 INSERT INTO `client` (`idClient`, `nomClient`, `prenomClient`, `emailClient`, `motDePasseClient`, `rueClient`, `cpClient`, `villeClient`, `telClient`) VALUES
-(3, 'Lucas', 'Chevalot', 'lucas.chevalot@gmail.com', '$2y$10$qJZGoizlRObBHtcfHlNztOwjSumUsSqmJYAf.bKqIWzCq6W7VVp6C', '15 rue du gué', '55000', 'Bar le duc', '0648789090');
+(3, 'aa', 'aa', 'aa@mail.com', '$2y$10$M3bU423Uv8x3hRSf5DNQUufYgQ9oPY4cofvY505Ga2pT/WFTYgtk2', 'aa', '12345', 'aa', '0611223344');
 
 -- --------------------------------------------------------
 
